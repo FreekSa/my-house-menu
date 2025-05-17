@@ -6,12 +6,12 @@ export default async function Page() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore)
 
-  const { data: todos } = await supabase.from('Product').select()
-  console.log('todos: ' + todos);
+  const { data: products } = await supabase.from('Product').select('*')
+  console.log('todos: ' + products);
   return (
     <ul>
-      {todos?.map((todo) => (
-        <li>{todo}</li>
+      {products?.map((p) => (
+        <li>{p.name}</li>
       ))}
     </ul>
   )
