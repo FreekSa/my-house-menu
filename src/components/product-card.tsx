@@ -1,16 +1,35 @@
 type Product = {
-  id: number;
-  name: string;
-  category: string;
-  description: string;
+  code: string;
+  product_name: string;
+  image_url?: string;
+  brands?: string;
+  categories_tags?: string[];
 };
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   return (
-    <div className="border p-4 rounded shadow">
-      <h2 className="text-xl font-semibold">{product.name}</h2>
-      <p className="text-sm text-gray-500">{product.category}</p>
-      <p>{product.description}</p>
+    <div
+      className="border p-2 rounded cursor-pointer hover:bg-gray-100"
+      onClick={onClick}
+    >
+      <h2 className="font-semibold">{product.product_name || "No name"}</h2>
+      <p className="text-sm text-gray-500">{product.brands}</p>
+      {product.image_url && (
+        <img
+          src={product.image_url}
+          alt={product.product_name}
+          className="h-20 object-contain mt-2"
+        />
+      )}
+      <p className="text-sm mt-1">
+        {product.categories_tags?.join(", ") || "No categories"}
+      </p>
     </div>
   );
 }
