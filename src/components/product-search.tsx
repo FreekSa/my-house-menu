@@ -18,7 +18,7 @@ export default function ProductSearch({ onSelect }: { onSelect: (product: Produc
   const searchProducts = async () => {
     setLoading(true);
 
-    const url = `https://world.openfoodfacts.org/api/v2/search?fields=product_name,code,image_url,categories_tags,brands&search_terms=${query}`;
+    const url = `https://world.openfoodfacts.net/api/v2/search?fields=product_name,code,image_url,categories_tags,brands&categories_tags=${query}&page_size=100`;
 
     const res = await fetch(url);
     const data = await res.json();
