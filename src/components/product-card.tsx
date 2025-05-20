@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type Product = {
   code: string;
   product_name: string;
@@ -21,7 +23,7 @@ export default function ProductCard({
       <h2 className="font-semibold">{product.product_name || "No name"}</h2>
       <p className="text-sm text-gray-500">{product.brands}</p>
       {product.image_url && (
-        <img
+        <Image
           src={product.image_url}
           alt={product.product_name}
           className="h-20 object-contain mt-2"

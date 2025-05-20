@@ -11,12 +11,9 @@ export default function Home() {
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger></AccordionTrigger>
-          <AccordionContent>
-
-          </AccordionContent>
+          <AccordionContent></AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
   );
 }
-
