@@ -4,6 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { logout } from "@/lib/supabase/auth/logout";
 
 export default function Home() {
   return (
@@ -14,6 +16,7 @@ export default function Home() {
           <AccordionContent></AccordionContent>
         </AccordionItem>
       </Accordion>
+      <Button onClick={logout}>Logout</Button>
     </div>
   );
 }
