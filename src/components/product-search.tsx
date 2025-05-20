@@ -1,15 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import ProductCard from "./product-card";
 
-type Product = {
-  code: string;
-  product_name: string;
-  image_url?: string;
-  brands?: string;
-  categories_tags?: string[];
-};
+import { searchProducts } from "@/lib/open-food-facts/products";
+import { Product } from "@/lib/open-food-facts/types";
+
+import ProductCard from "./product-card";
 
 export default function ProductSearch({
   onSelect,
@@ -19,18 +15,6 @@ export default function ProductSearch({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const searchProducts = async () => {
-    setLoading(true);
-
-    const url = `https://world.openfoodfacts.net/api/v2/search?fields=product_name,code,image_url,categories_tags,brands&categories_tags=${query}&page_size=100`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-    setResults(data.products || []);
-
-    setLoading(false);
-  };
 
   return (
     <div>
@@ -44,7 +28,12 @@ export default function ProductSearch({
         />
         <button
           className="bg-blue-500 text-white px-3 py-1"
-          onClick={searchProducts}
+          onClick={async () => {
+            setLoading(true);
+            const products = await searchProducts(query);
+            setResults(products);
+            setLoading(false);
+          }}
         >
           Search
         </button>
@@ -54,14 +43,14 @@ export default function ProductSearch({
 
       <div className="flex flex-wrap gap-4">
         {results.map((product) => (
-            <div key={product.code} className="w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.5rem)]">
-            <ProductCard
-                product={product}
-                onClick={() => onSelect(product)}
-            />
-            </div>
+          <div
+            key={product.code}
+            className="w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.5rem)]"
+          >
+            <ProductCard product={product} onClick={() => onSelect(product)} />
+          </div>
         ))}
-        </div>
+      </div>
     </div>
   );
 }

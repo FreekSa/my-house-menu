@@ -1,19 +1,22 @@
 "use client";
 
-import ProductSearch from "@/components/product-search";
 import { useState } from "react";
 
-export default function AddProductPage() {
-  const [myProducts, setMyProducts] = useState<any[]>([]);
+import { Product } from "@/lib/open-food-facts/types";
 
-  const handleAdd = (product: any) => {
-    setMyProducts((prev) => [...prev, product]);
-  };
+import ProductSearch from "@/components/product-search";
+
+export default function AddProductPage() {
+  const [myProducts, setMyProducts] = useState<Product[]>([]);
 
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-4">Search & Add Products</h1>
-      <ProductSearch onSelect={handleAdd} />
+      <ProductSearch
+        onSelect={(product) => {
+          setMyProducts((prev) => [...prev, product]);
+        }}
+      />
 
       <hr className="my-6" />
 
