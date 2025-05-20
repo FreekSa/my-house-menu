@@ -21,12 +21,13 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - uses: pnpm/action-setup@v2
+        with:
+          version: 9.12.0
       - uses: actions/setup-node@v4
         with:
           node-version: latest
           cache: pnpm
       - run: pnpm install --dev
-      - run: pnpm approve-builds
       - run: pnpm run gen-types
       - name: Check for file changes
         id: git_status
