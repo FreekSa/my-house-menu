@@ -25,8 +25,8 @@ jobs:
         with:
           node-version: latest
           cache: pnpm
-      - run: pnpm approve-builds
       - run: pnpm install --dev
+      - run: pnpm approve-builds
       - run: pnpm run gen-types
       - name: Check for file changes
         id: git_status
