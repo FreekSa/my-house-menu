@@ -1,4 +1,1 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - supabase
-  - unrs-resolver
+dangerouslyAllowAllBuilds: true
