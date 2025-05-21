@@ -11,6 +11,9 @@ jobs:
     env:
       DATABASE_TYPES_OUTPUT: src/utils/supabase/database-types.ts
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: supabase/setup-cli@v1
         with:
           version: latest
