@@ -9,7 +9,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     env:
-      DATABASE_TYPES_OUTPUT: ./src/utils/supabase/database-types.ts
+      DATABASE_TYPES_OUTPUT: database-types.ts
     steps:
       - uses: supabase/setup-cli@v1
         with:
