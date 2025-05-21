@@ -1,46 +1,26 @@
 name: Generate database types
 
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  pull_request:
 
   workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      PROJECT_REF: rfzxuyaxeahkdeeidrgt
       DATABASE_TYPES_OUTPUT: ./utils/supabase/database-types.ts
     steps:
-      - uses: actions/checkout@v2
+      - uses: supabase/setup-cli@v1
         with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          cache: pnpm
-      - run: pnpm install --dev
-      - run: pnpm run gen-types
-      - name: Check for file changes
-        id: git_status
+          version: latest
+      - run: supabase init
+      - run: supabase db start
+      - name: Verify generated types match Postgres schema
         run: |
-          echo "status=$(git status -s)" >> $GITHUB_OUTPUT
-      - name: Commit files
-        if: ${{ contains(steps.git_status.outputs.status, ' ') }}
-        run: |
-          git add $DATABASE_TYPES_OUTPUT
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Update database types" -a
-      - name: Push changes
-        if: ${{ contains(steps.git_status.outputs.status, ' ') }}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          supabase gen types typescript --local > $DATABASE_TYPES_OUTPUT
+          if ! git diff --ignore-space-at-eol --exit-code --quiet $DATABASE_TYPES_OUTPUT; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff
+            exit 1
+          fi
